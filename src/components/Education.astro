@@ -1,0 +1,65 @@
+---
+import { resume } from "../data/resume";
+---
+
+<section id="education" class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">Education</h2>
+    <div class="education-list">
+      {
+        resume.education.map((entry) => (
+          <article class="education-card fade-in">
+            <h3 class="education-degree">{entry.degree}</h3>
+            <p class="education-school">
+              {entry.school} · {entry.location}
+            </p>
+            {entry.gpa && <p class="education-gpa">{entry.gpa}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .education-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .education-card {
+    padding: 1.5rem;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
+  }
+
+  .education-card:hover {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-md);
+  }
+
+  .education-degree {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
+  }
+
+  .education-school {
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .education-gpa {
+    font-size: 0.875rem;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    margin: 0.5rem 0 0;
+  }
+</style>

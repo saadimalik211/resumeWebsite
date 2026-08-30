@@ -1,0 +1,119 @@
+---
+import { resume } from "../data/resume";
+
+const pdfUrl = `${import.meta.env.BASE_URL}SaadMalikResume.pdf`;
+---
+
+<section id="about" class="hero section">
+  <div class="container hero-inner fade-in">
+    <p class="hero-greeting">Hi, I'm</p>
+    <h1 class="hero-name">{resume.name}</h1>
+    <p class="hero-title">{resume.title}</p>
+    <p class="hero-location">{resume.location}</p>
+    <p class="hero-summary">
+      Software engineer with experience across cloud infrastructure, CI/CD,
+      vision AI, and full-stack development — from startup founding to enterprise
+      implementation.
+    </p>
+    <div class="hero-links">
+      {
+        resume.links.map((link) => (
+          <a href={link.url} class="hero-link" target="_blank" rel="noopener noreferrer">
+            {link.label}
+          </a>
+        ))
+      }
+      <a href={`mailto:${resume.email}`} class="hero-link">Email</a>
+      <a href={pdfUrl} class="hero-link hero-link-accent" download>
+        Download PDF
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-top: 5rem;
+    padding-bottom: 3rem;
+  }
+
+  .hero-inner {
+    max-width: 42rem;
+  }
+
+  .hero-greeting {
+    font-size: 1.125rem;
+    color: var(--color-accent);
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+  }
+
+  .hero-name {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 0 0 0.5rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+  }
+
+  .hero-location {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1.5rem;
+  }
+
+  .hero-summary {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0 0 2rem;
+  }
+
+  .hero-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition:
+      border-color var(--transition),
+      background var(--transition),
+      transform var(--transition);
+  }
+
+  .hero-link:hover {
+    border-color: var(--color-accent);
+    background: var(--color-accent-subtle);
+    transform: translateY(-2px);
+    color: var(--color-accent);
+  }
+
+  .hero-link-accent {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .hero-link-accent:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #fff;
+  }
+</style>

@@ -1,0 +1,73 @@
+Saad Malik
+San Leandro, CA | 607-542-6874 | saadmali@gensosekai.com
+LinkedIn: linkedin.com/in/saad-ismail-malik
+GitHub: https://github.com/saadimalik211
+Technical Support Analyst
+
+TECHNICAL SKILLS
+Cloud Services: AWS (EC2, S3, Lambda, API, DynamoDB, RDS, Cloudfront, IAM, CloudFormation, SAM). GCS (Storage, Logging, CloudSQL). CI/CD processes (Github Actions, Jenkins) for both on-premise and cloud.
+Programming: Python. Javascript. C++. Bash. Django (Python-based web framework). Rest API. HTML & CSS.
+System Administration: Linux, macOS & Windows System Administration & Troubleshooting.
+Machine Learning: Vision AI (Object recognition & tracking using OpenCV / Tensorflow / Yolov5 / Ultralytics).
+Databases: SQL. MariaDB. NoSQL. Cloud DBs (GCS CloudSQL, AWS DynamoDB).
+CI/CD and IaC: Docker. Jenkins. Terraform. Git & Github Actions.
+Other Tools: Jira. Microsoft Dynamics 365.
+Amazon Cloud Services Badges: CloudQuest Solutions Architect. CloudQuest Cloud Practitioner.
+
+PROFESSIONAL EXPERIENCE
+Software Engineer | Startup Founder
+ByteVision | Remote | March 2023 – 2025
+Review pain points with local restaurant owners and develop technology and software oriented solutions.
+Solutions range from purely software (i.e. web apps), to embedded systems integration (i.e. scanners soldered to esp32 controllers submitting scans to a central server for processing).
+Github Organization/Public Repositories are available to view here: https://tinyurl.com/4c8c7ybd
+Tools: Yolov8. Tensor. CUDA. Django. Python. C++. Javascript. HTML. SQL. Docker. Git.
+Built all infrastructure and setup all git resources to work with other SWEs on project.
+Reviewed business needs and possible solutions with small business owners.
+Developed framework for building training datasets as well as training of vision AI models.
+Developed functionality to deploy model and run it against input (images or video, various resolutions).
+Built multi-architecture CI/CD to automate the build and deployment of Django WebApp+DB.
+
+Implementation Engineer
+CognitOps | Remote | Feb 2022 – Feb 2023
+Conducted in-depth reviews of enterprise warehouse Oracle SQL databases to identify key data points to be integrated into software. Created highly complex SQL queries to extract and format client data as required by development and data science teams.
+Tools: SQL. YAML. JSON. Scala. Git. Jira.
+Increased customer satisfaction and retention by collaborating with clients to develop customized workflows for warehouse labor, identifying and addressing pain points along the way.
+Deployed software on hybrid architectures to facilitate SQL query execution from warehouses and delivery of data to Google Cloud Services.
+Collaborated closely with development teams to streamline implementation time frames, reducing from 12+ months to 45 days.
+Decreased introduction of software bugs by tracking progress with Github integration for code maintenance and review.
+
+Technical Analyst | Implementation & Support
+Rochester Software Associates | Remote | Sep 2016 – Feb 2022
+Managed multiple new customer implementation projects, prioritizing more complex and high need customers. Took ownership of complex and high value customers. Provided technical support to existing customers. 
+Tools: Linux. Shibboleth. Bash. Windows Server.
+Took ownership of several high visibility, high complexity customers – some for many years.
+Improved customer relations by working on and resolving issues submitted to the help desk.
+Work closely with customers on documenting feature requests and bug reports, escalated to development.
+Installation and configuration of RSA software per customer specifications for both cloud and on-premise.
+Increased team efficiency and accuracy by documenting processes in MediaWiki. 
+Improved team performance with new hire training.
+
+Control Systems Engineer |2018– 2018
+Control Systems Engineer Intern | 2012 – 2016
+Corning, Inc | Corning, NY | 2012 – 2018
+Designed and implemented monitoring systems for emissions systems to collect experimental catalytic converter test data.
+Tools: C#, Bash, Fusion360, Linux, Windows IoT.
+Allowed researchers to collect real-time information on catalytic converter performance via collection of exhaust gas measurements installed on semi-trucks.
+Enabled in-depth data collection for research team with portable container lab which routed truck exhaust through container with its various instruments.
+Improved project cost and efficiency by advocating for and assisting management in transitioning from Windows PCs to dedicated embedded Linux and Windows IoT in lab and production environments.
+Streamlined project implementations with sensor monitoring and logging device built using Raspberry Pi, Arch Linux, Bash, C#, and 3D printing.
+
+Datacenter Engineer
+ColoCrossing, Inc | Buffalo, NY | 2014 – 2015
+Provided break-fix support for servers located in data centers.
+Tools: C++, Python, MySQL, Bash
+Resolved issues by diagnosing bad PSUs, RAM, or other hardware and replacing faulty parts.
+Completed customer orders by assembling and racking cabinets of servers, along with running and cutting/fitting ethernet and fiber cables.
+Maintained customer satisfaction by responding to tickets within SLA guidelines and communicating quickly to work towards resolution.
+Pushed advanced issues towards resolution by escalating to proper department, with resources required for further troubleshooting.
+Increased team efficiency by working with and improving in-house custom CRM, built using CentOS, Python, MySQL, and C++.
+
+EDUCATION
+
+Associate of Science: Computer Science
+Corning Community College | Corning, NY | 3.97 GPA
