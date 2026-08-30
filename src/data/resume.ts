@@ -60,7 +60,7 @@ export const resume: Resume = {
     {
       category: "Cloud Services",
       items: [
-        "AWS (EC2, S3, Lambda, API, DynamoDB, RDS, CloudFront, IAM, CloudFormation, SAM)",
+        "AWS (EC2, S3, R53, Lambda, API, DynamoDB, RDS, CloudFront, IAM, CloudFormation, SAM)",
         "GCS (Storage, Logging, CloudSQL)",
         "CI/CD (GitHub Actions, Jenkins)",
       ],
@@ -88,7 +88,7 @@ export const resume: Resume = {
     {
       category: "Machine Learning",
       items: [
-        "Vision AI: ",
+        "Vision AI",
         "OpenCV", 
         "TensorFlow",
         "YOLO",
