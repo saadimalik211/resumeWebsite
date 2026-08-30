@@ -80,14 +80,19 @@ export const resume: Resume = {
     {
       category: "System Administration",
       items: [
-        "Linux, macOS & Windows administration",
-        "Troubleshooting",
+        "Linux, MacOS & Windows",
+        "Proxmox",
+        "Docker",
       ],
     },
     {
       category: "Machine Learning",
       items: [
-        "Vision AI (OpenCV, TensorFlow, YOLOv5, Ultralytics)",
+        "Vision AI: ",
+        "OpenCV", 
+        "TensorFlow",
+        "YOLO",
+        "Ultralytics",
       ],
     },
     {
