@@ -1,0 +1,355 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const ANALYTICS_URL = "https://worker.gensosekai.workers.dev/analytics";
+---
+
+<Layout title="Visitor Analytics" description="Analytics dashboard for visitor tracking">
+  <main class="analytics-page">
+    <div class="container">
+      <h1>Visitor Analytics</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Visits</div>
+          <div class="stat-value" id="total-visits">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Unique Visitors</div>
+          <div class="stat-value" id="unique-visitors">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Countries</div>
+          <div class="stat-value" id="countries">—</div>
+        </div>
+      </div>
+
+      <div class="visitors-section">
+        <h2>Recent Visitors</h2>
+        <div id="loading" class="loading-state">Loading...</div>
+        <div id="error" class="error-state" style="display: none;">
+          Failed to load analytics data.
+        </div>
+        <div id="visitors-table" style="display: none;"></div>
+      </div>
+
+      <div class="pagination">
+        <button id="prev-btn" disabled>Previous</button>
+        <span id="page-info">Page 1</span>
+        <button id="next-btn">Next</button>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .analytics-page {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--color-text);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    margin: 2rem 0 1rem;
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .stat-card {
+    background: var(--color-bg-elevated);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+  }
+
+  .stat-label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .visitors-section {
+    background: var(--color-bg-elevated);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-border);
+  }
+
+  .loading-state,
+  .error-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-text-muted);
+  }
+
+  .error-state {
+    color: #e74c3c;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  th,
+  td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  th {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    color: var(--color-text);
+  }
+
+  tr:hover {
+    background: var(--color-bg-muted);
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: calc(var(--radius) - 0.25rem);
+    cursor: pointer;
+    font-weight: 500;
+    transition: background var(--transition);
+  }
+
+  button:hover:not(:disabled) {
+    background: var(--color-accent-hover);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  #page-info {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .ip-masked {
+    font-family: monospace;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .visitors-section {
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    table {
+      font-size: 0.875rem;
+    }
+
+    th,
+    td {
+      padding: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  const ANALYTICS_URL = "https://worker.gensosekai.workers.dev/analytics";
+  const LIMIT = 20;
+  let currentPage = 0;
+
+  interface Visitor {
+    id: number;
+    ip_address: string | null;
+    country: string | null;
+    city: string | null;
+    region: string | null;
+    timezone: string | null;
+    user_agent: string | null;
+    visited_at: number;
+    session_id: string | null;
+  }
+
+  interface Stats {
+    total_visits: number;
+    unique_visitors: number;
+    countries: number;
+  }
+
+  interface AnalyticsData {
+    visitors: Visitor[];
+    stats: Stats;
+  }
+
+  function maskIP(ip: string | null): string {
+    if (!ip) return "—";
+    const parts = ip.split(".");
+    if (parts.length === 4) {
+      return `${parts[0]}.${parts[1]}.${parts[2]}.***`;
+    }
+    return ip.substring(0, ip.length - 4) + "****";
+  }
+
+  function formatDate(timestamp: number): string {
+    return new Date(timestamp).toLocaleString();
+  }
+
+  function truncate(text: string | null, length: number): string {
+    if (!text) return "—";
+    return text.length > length ? text.substring(0, length) + "..." : text;
+  }
+
+  function renderVisitorsTable(visitors: Visitor[]): void {
+    const table = document.createElement("table");
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Date/Time</th>
+          <th>Location</th>
+          <th>IP Address</th>
+          <th>User Agent</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${visitors
+          .map(
+            (v) => `
+          <tr>
+            <td>${formatDate(v.visited_at)}</td>
+            <td>
+              ${v.city ? `${v.city}, ` : ""}${v.country || "—"}
+              ${v.timezone ? `<br><small style="color: var(--color-text-muted);">${v.timezone}</small>` : ""}
+            </td>
+            <td class="ip-masked">${maskIP(v.ip_address)}</td>
+            <td>${truncate(v.user_agent, 50)}</td>
+          </tr>
+        `
+          )
+          .join("")}
+      </tbody>
+    `;
+
+    const container = document.getElementById("visitors-table");
+    if (container) {
+      container.innerHTML = "";
+      container.appendChild(table);
+      container.style.display = "block";
+    }
+  }
+
+  function updateStats(stats: Stats): void {
+    const totalEl = document.getElementById("total-visits");
+    const uniqueEl = document.getElementById("unique-visitors");
+    const countriesEl = document.getElementById("countries");
+
+    if (totalEl) totalEl.textContent = stats.total_visits?.toLocaleString() || "0";
+    if (uniqueEl) uniqueEl.textContent = stats.unique_visitors?.toLocaleString() || "0";
+    if (countriesEl) countriesEl.textContent = stats.countries?.toString() || "0";
+  }
+
+  async function loadAnalytics(page: number = 0): Promise<void> {
+    const loadingEl = document.getElementById("loading");
+    const errorEl = document.getElementById("error");
+    const tableEl = document.getElementById("visitors-table");
+
+    if (loadingEl) loadingEl.style.display = "block";
+    if (errorEl) errorEl.style.display = "none";
+    if (tableEl) tableEl.style.display = "none";
+
+    try {
+      const offset = page * LIMIT;
+      const response = await fetch(`${ANALYTICS_URL}?limit=${LIMIT}&offset=${offset}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch analytics");
+      }
+
+      const data: AnalyticsData = await response.json();
+
+      updateStats(data.stats);
+      renderVisitorsTable(data.visitors);
+
+      const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
+      const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
+      const pageInfo = document.getElementById("page-info");
+
+      if (prevBtn) prevBtn.disabled = page === 0;
+      if (nextBtn) nextBtn.disabled = data.visitors.length < LIMIT;
+      if (pageInfo) pageInfo.textContent = `Page ${page + 1}`;
+
+      currentPage = page;
+    } catch (error) {
+      if (errorEl) errorEl.style.display = "block";
+      console.error("Failed to load analytics:", error);
+    } finally {
+      if (loadingEl) loadingEl.style.display = "none";
+    }
+  }
+
+  document.getElementById("prev-btn")?.addEventListener("click", () => {
+    if (currentPage > 0) {
+      loadAnalytics(currentPage - 1);
+    }
+  });
+
+  document.getElementById("next-btn")?.addEventListener("click", () => {
+    loadAnalytics(currentPage + 1);
+  });
+
+  loadAnalytics(0);
+</script>

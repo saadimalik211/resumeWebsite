@@ -43,6 +43,15 @@ npx wrangler d1 migrations apply visitor_analytics --local
 npx wrangler deploy
 ```
 
+## Frontend Analytics Dashboard
+
+A visual analytics dashboard is available at `/analytics` on your website (e.g., `https://resume.gensosekai.com/analytics`). This page displays:
+
+- Summary statistics (total visits, unique visitors, countries)
+- Recent visitor list with location and timestamp
+- Pagination for browsing historical data
+- IP addresses are masked for privacy (last octet hidden)
+
 ## API Endpoints
 
 ### POST / - Track a Visit
