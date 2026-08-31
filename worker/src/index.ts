@@ -34,7 +34,7 @@ function corsHeaders(request: Request): HeadersInit {
 	return {
 		"Access-Control-Allow-Origin": allowOrigin,
 		"Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-		"Access-Control-Allow-Headers": "Content-Type",
+		"Access-Control-Allow-Headers": "Content-Type, X-Session-ID",
 		Vary: "Origin",
 	};
 }
@@ -92,17 +92,18 @@ export default {
 
 		const url = new URL(request.url);
 
-		if (url.pathname === "/analytics") {
-			if (request.method !== "GET") {
-				return new Response("Method Not Allowed", {
-					status: 405,
-					headers: {
-						...corsHeaders(request),
-						Allow: "GET, OPTIONS",
-					},
-				});
-			}
+	if (url.pathname === "/analytics") {
+		if (request.method !== "GET") {
+			return new Response("Method Not Allowed", {
+				status: 405,
+				headers: {
+					...corsHeaders(request),
+					Allow: "GET, OPTIONS",
+				},
+			});
+		}
 
+		try {
 			const limit = Number.parseInt(url.searchParams.get("limit") || "100", 10);
 			const offset = Number.parseInt(url.searchParams.get("offset") || "0", 10);
 
@@ -124,7 +125,20 @@ export default {
 				visitors: results,
 				stats: stats?.[0] || {},
 			});
+		} catch (error) {
+			console.error("Analytics query failed:", error);
+			return json(
+				request,
+				{
+					error: "Failed to fetch analytics data",
+					message: error instanceof Error ? error.message : "Unknown error",
+					visitors: [],
+					stats: { total_visits: 0, unique_visitors: 0, countries: 0 },
+				},
+				500
+			);
 		}
+	}
 
 		if (request.method !== "GET" && request.method !== "POST") {
 			return new Response("Method Not Allowed", {
@@ -139,15 +153,19 @@ export default {
 		const current = Number.parseInt((await env.VISITOR_COUNT.get(COUNT_KEY)) ?? "0", 10);
 		const count = Number.isFinite(current) ? current : 0;
 
-		if (request.method === "POST") {
-			const next = count + 1;
-			await env.VISITOR_COUNT.put(COUNT_KEY, String(next));
+	if (request.method === "POST") {
+		const next = count + 1;
+		await env.VISITOR_COUNT.put(COUNT_KEY, String(next));
 
+		try {
 			const visitorInfo = extractVisitorInfo(request);
 			await storeVisitor(env.DB, visitorInfo);
-
-			return json(request, { count: next });
+		} catch (error) {
+			console.error("Failed to store visitor data:", error);
 		}
+
+		return json(request, { count: next });
+	}
 
 		return json(request, { count });
 	},
