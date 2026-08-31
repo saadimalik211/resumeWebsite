@@ -3,7 +3,7 @@ export interface Env {
   }
   
   const CORS_HEADERS = {
-    "Access-Control-Allow-Origin": "https://saadimalik211.github.io",
+    "Access-Control-Allow-Origin": "https://resume.gensosekai.com",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
