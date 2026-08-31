@@ -1,18 +1,15 @@
 ---
 import "../styles/global.css";
 import { resume } from "../data/resume";
-
 interface Props {
   title?: string;
   description?: string;
 }
-
 const {
   title = `${resume.name} — ${resume.title}`,
   description = `Resume and portfolio of ${resume.name}, ${resume.title} based in ${resume.location}.`,
 } = Astro.props;
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
@@ -40,5 +37,19 @@ const {
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <slot />
+    <footer class="visitor-footer">
+      <span id="visitor-count">—</span> visitors
+    </footer>
+    <script>
+      fetch("https://worker.gensosekai.workers.dev", { method: "POST" })
+        .then((res) => res.json())
+        .then((data) => {
+          const el = document.getElementById("visitor-count");
+          if (el) el.textContent = data.count.toString();
+        })
+        .catch(() => {
+          // fail silently if the Worker is unreachable
+        });
+    </script>
   </body>
 </html>
