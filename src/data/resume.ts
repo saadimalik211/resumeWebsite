@@ -62,7 +62,7 @@ export const resume: Resume = {
       items: [
         "AWS (EC2, S3, R53, Lambda, API, DynamoDB, RDS, CloudFront, IAM, CloudFormation, SAM)",
         "GCS (Storage, Logging, CloudSQL)",
-        "CI/CD (GitHub Actions, Jenkins)",
+        "CI/CD (GitHub Actions, Jenkins, Cloudflare Workers)",
       ],
     },
     {
@@ -103,6 +103,7 @@ export const resume: Resume = {
         "NoSQL",
         "GCS CloudSQL",
         "AWS DynamoDB",
+        "Cloudflare KV",
       ],
     },
     {
