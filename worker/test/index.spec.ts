@@ -1,29 +1,40 @@
-import {
-	env,
-	createExecutionContext,
-	waitOnExecutionContext,
-	SELF,
-} from "cloudflare:test";
-import { describe, it, expect } from "vitest";
-import worker from "../src/index";
+import { env, SELF } from "cloudflare:test";
+import { describe, it, expect, beforeEach } from "vitest";
 
-// For now, you'll need to do something like this to get a correctly-typed
-// `Request` to pass to `worker.fetch()`.
-const IncomingRequest = Request<unknown, IncomingRequestCfProperties>;
-
-describe("Hello World worker", () => {
-	it("responds with Hello World! (unit style)", async () => {
-		const request = new IncomingRequest("http://example.com");
-		// Create an empty context to pass to `worker.fetch()`.
-		const ctx = createExecutionContext();
-		const response = await worker.fetch(request, env, ctx);
-		// Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
-		await waitOnExecutionContext(ctx);
-		expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
+describe("visitor count worker", () => {
+	beforeEach(async () => {
+		await env.VISITOR_COUNT.delete("count");
 	});
 
-	it("responds with Hello World! (integration style)", async () => {
+	it("returns 0 when the counter has not been set", async () => {
 		const response = await SELF.fetch("https://example.com");
-		expect(await response.text()).toMatchInlineSnapshot(`"Hello World!"`);
+		expect(response.status).toBe(200);
+		expect(await response.json()).toEqual({ count: 0 });
+	});
+
+	it("increments the count on POST", async () => {
+		const first = await SELF.fetch("https://example.com", { method: "POST" });
+		expect(await first.json()).toEqual({ count: 1 });
+
+		const second = await SELF.fetch("https://example.com", { method: "POST" });
+		expect(await second.json()).toEqual({ count: 2 });
+	});
+
+	it("reads without incrementing on GET", async () => {
+		await env.VISITOR_COUNT.put("count", "9");
+		const response = await SELF.fetch("https://example.com");
+		expect(await response.json()).toEqual({ count: 9 });
+		expect(await env.VISITOR_COUNT.get("count")).toBe("9");
+	});
+
+	it("responds to CORS preflight", async () => {
+		const response = await SELF.fetch("https://example.com", {
+			method: "OPTIONS",
+			headers: { Origin: "https://resume.gensosekai.com" },
+		});
+		expect(response.status).toBe(204);
+		expect(response.headers.get("Access-Control-Allow-Origin")).toBe(
+			"https://resume.gensosekai.com",
+		);
 	});
 });

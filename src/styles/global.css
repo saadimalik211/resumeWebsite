@@ -163,3 +163,16 @@ a:hover {
 .fade-in:nth-child(5) {
   animation-delay: 0.4s;
 }
+
+.visitor-footer {
+  padding: 0 0 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.visitor-footer #visitor-count {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+  font-weight: 600;
+}

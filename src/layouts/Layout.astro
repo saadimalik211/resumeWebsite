@@ -41,15 +41,32 @@ const {
       <span id="visitor-count">—</span> visitors
     </footer>
     <script>
-      fetch("https://worker.gensosekai.workers.dev", { method: "POST" })
-        .then((res) => res.json())
-        .then((data) => {
-          const el = document.getElementById("visitor-count");
-          if (el) el.textContent = data.count.toString();
-        })
-        .catch(() => {
-          // fail silently if the Worker is unreachable
+      const COUNT_URL = "https://worker.gensosekai.workers.dev";
+      const SESSION_KEY = "visitor-counted";
+
+      async function loadVisitorCount() {
+        const alreadyCounted = sessionStorage.getItem(SESSION_KEY) === "1";
+        const res = await fetch(COUNT_URL, {
+          method: alreadyCounted ? "GET" : "POST",
         });
+        if (!res.ok) return;
+        const data: unknown = await res.json();
+        if (
+          typeof data !== "object" ||
+          data === null ||
+          !("count" in data) ||
+          typeof (data as { count: unknown }).count !== "number"
+        ) {
+          return;
+        }
+        if (!alreadyCounted) sessionStorage.setItem(SESSION_KEY, "1");
+        const el = document.getElementById("visitor-count");
+        if (el) el.textContent = (data as { count: number }).count.toLocaleString();
+      }
+
+      loadVisitorCount().catch(() => {
+        // Keep the placeholder if the Worker is unreachable.
+      });
     </script>
   </body>
 </html>

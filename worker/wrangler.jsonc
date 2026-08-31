@@ -14,8 +14,7 @@
 	"kv_namespaces": [
 		{
 			"binding": "VISITOR_COUNT",
-			"id": "5fddb482bc4047c692ab0302177e38ae",
-			"remote": true
+			"id": "5fddb482bc4047c692ab0302177e38ae"
 		}
 	]
 	/**
